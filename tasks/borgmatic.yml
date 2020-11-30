@@ -6,7 +6,7 @@
       - python3-pip
       - python3-setuptools
     state: present
-  when: '{{ borgbackup_install_os_dependencies }}'
+  when: borgbackup_install_os_dependencies
 
 - name: Install Borgmatic from pip
   pip:
@@ -26,12 +26,13 @@
     dest: "{{ borgmatic_config_file }}"
     mode: 0600
   when: borg_repository or borg_repositories or ((borg_backups | length) > 0)
+  tags: ['config']
 
 - name: Add cron-job for borgmatic
   cron:
     name: "borgmatic"
-    hour: "{{ borgmatic_cron_time.split(':')[0] | default(4 | random, true) }}"
-    minute: "{{ borgmatic_cron_time.split(':')[1] | default(59 | random) }}"
+    hour: "{{ borgmatic_cron_time.split(':')[0] | default(4 | random(seed=inventory_hostname), true) }}"
+    minute: "{{ borgmatic_cron_time.split(':')[1] | default(59 | random(seed=inventory_hostname)) }}"
     user: "root"
     cron_file: borgmatic
     job: "/usr/local/bin/borgmatic -c {{ borgmatic_config_file }}"
@@ -45,5 +46,3 @@
     env: yes
     value: /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
   when: borg_repository or borg_repositories or ((borg_backups | length) > 0)
-
-...

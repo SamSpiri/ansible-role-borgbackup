@@ -6,7 +6,7 @@ borgbackup_use_borgmatic: false
 
 borgmatic_version: '1.2.14'
 
-borgbackup_version: '1.1.8'
+borgbackup_version: '1.1.14'
 
 # todo this should be set depending on the target platform
 borgbackup_platform: 'linux64'
@@ -44,5 +44,5 @@ borgmatic_config_file: /etc/borgmatic/config.yaml
 borg_repository: ''
 borg_repositories: []
 borg_source_directories: []
-
-...
+borg_exclude_from: []
+borg_encryption_passcommand: ''
